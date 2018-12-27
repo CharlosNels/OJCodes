@@ -132,7 +132,7 @@ int main() {
 //	int num;
 //	cin >> num;
 //	cout << fib(num) << endl;
-//	cout << "�ݹ������" << counter << "��" << endl;
+//	cout << "µÝ¹éµ÷ÓÃÁË" << counter << "´Î" << endl;
 //	system("pause");
 //}
 /*1114*/
@@ -1349,8 +1349,8 @@ public:
 	}
 };
 int main() {
-	human *a = new human("����");
-	human *b = new human("����");
+	human *a = new human("ÕÅÈý");
+	human *b = new human("ÀîËÄ");
 	cout << a->get_name() << endl;
 	cout<< a->get_others_name(b)<<endl;
 	cout<< b->get_name() << endl;
@@ -1995,3 +1995,131 @@ int main() {
 	return 0;
 }
 */
+/*归并排序*/
+/*
+#include <iostream>
+
+using namespace std;
+
+void Merge(int *array, int low, int middle, int high)
+{
+	int *A = new int[high - low + 1];
+	int i = low;
+	int j = middle + 1;
+	int k = 0;
+	while (i <= middle && j <= high)
+	{
+		if (array[i] < array[j])
+			A[k++] = array[i++];
+		else
+			A[k++] = array[j++];
+	}
+
+	while (i <= middle)
+		A[k++] = array[i++];
+	while (j <= high)
+		A[k++] = array[j++];
+	for (i = low; i <= high; i++)
+		array[i] = A[i - low]; 
+	delete A;
+}
+
+void MergeSort(int *array, int low, int high)
+{
+	int middle;
+	if (low < high)
+	{
+		middle = (low + high) / 2;
+		MergeSort(array, low, middle);
+		MergeSort(array, middle + 1, high);
+		Merge(array, low, middle, high);
+	}
+}
+
+int main()
+{
+	int n;
+	cin >> n;
+	int *array = new int[n];
+	for (int i = 0; i < n; i++)
+	{
+		cin >> array[i];
+	}
+
+	MergeSort(array, 0, n - 1);
+	for (int j = 0; j < n; j++)
+	{
+		cout << array[j] << " ";
+	}
+	cout << endl;
+	return 0;
+}
+*/
+
+/*寻找两个链表的第一个公共节点*/
+#include <iostream>
+using namespace std;
+
+struct Node {
+	int val;
+	Node *next;
+	Node() :val(0),next(0){}
+};
+
+//获得链表的长度
+int GetListLength(Node *head) {
+	int len=0;
+	for (;head; len++)
+		head = head->next;
+	return len;
+}
+
+//从指定节点后移steps个节点
+void relocate(Node *&list,const int &steps) {
+	for (int i = 0; i < steps; i++) {
+		list = list->next;
+	}
+}
+
+int GetCommonNode(Node *list1, Node *list2) {
+	int len1 = GetListLength(list1);
+	int len2 = GetListLength(list2);
+	//获得两链表中的长链表
+	Node *longList = list1;
+	Node *shortList = list2;
+	if (len2 > len1) {
+		longList = list2;
+		shortList = list1;
+	}
+	//将长链表后移n个节点，使得新链表的长度与锻炼表的长度相等
+	relocate(longList, abs(len1 - len2));
+	//此时可以让两个链表同时向后移动来找到公共节点
+	while (longList) {
+		if (longList->val == shortList->val) {
+			return longList->val;
+		}
+		longList = longList->next;
+		shortList = shortList->next;
+	}
+	//如果没有公共节点，返回-1
+	return -1;
+}
+
+int main() {
+	Node n1, n2, n3, n4, n5, n6, n7;
+	n1.val = 1;
+	n2.val = 2;
+	n3.val = 3;
+	n4.val = 4;
+	n5.val = 5;
+	n6.val = 6;
+	n7.val = 7;
+	n1.next = &n2;
+	n2.next = &n3;
+	n3.next = &n4;
+	n4.next = &n5;
+	n5.next = &n6;
+	n7.next = &n4;
+	cout << GetCommonNode(&n1, &n7) << endl;
+	system("Pause");
+}
